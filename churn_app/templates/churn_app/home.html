@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Churn Predictor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lil+Grotesk:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #fff;
+            height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            padding: 40px;
+            max-width: 480px;
+            width: 90%;
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+
+
+        .glass-card h1 {
+    font-family: 'Lil Grotesk', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #ffffff;
+    animation: glow 1.2s ease-in-out forwards;
+    text-shadow: 0 0 8px #00e5ff, 0 0 20px #00e5ff;
+}
+@keyframes glow {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+        .glass-card p {
+            font-size: 0.95rem;
+            color: #cfd8dc;
+        }
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: none;
+        }
+
+        .form-control::file-selector-button {
+            background: #26c6da;
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .btn-upload {
+            background-color: #00e5ff;
+            color: #0f2027;
+            font-weight: bold;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .btn-upload:hover {
+            background-color: #00bcd4;
+        }
+
+        .lottie {
+            margin-bottom: 10px;
+            margin-top: -40px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glass-card">
+        <!-- Animated Lottie Dashboard -->
+        <div class="lottie">
+            <lottie-player
+                src="https://assets9.lottiefiles.com/packages/lf20_HpFqiS.json"
+                background="transparent"
+                speed="1"
+                style="width: 200px; height: 200px;"
+                loop autoplay>
+            </lottie-player>
+        </div>
+
+        <h1>Churn Predictor</h1>
+        <p>Upload your customer CSV and detect churn risk with beautiful insights.</p>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                {{ form.csv_file }}
+            </div>
+            <button type="submit" class="btn-upload">Upload & Predict</button>
+        </form>
+        {% if error %}
+    <div class="alert alert-danger mt-3">{{ error }}</div>
+{% endif %}
+    </div>
+
+</body>
+</html>

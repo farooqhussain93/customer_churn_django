@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Churn Prediction Results</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      color: #ffffff;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    h2 {
+      text-align: center;
+      font-weight: 700;
+      margin-bottom: 40px;
+      color: #00e5ff;
+      text-shadow: 0 0 10px #00e5ff;
+    }
+
+
+    .card {
+  background-color: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 20px;
+  color: #fff;
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: scale(1.01);
+}
+
+    .churn-label {
+      font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 8px;
+      display: inline-block;
+      margin-top: 10px;
+      margin-bottom: 2px;
+      bottom: 20px;
+      right: 20px; 
+    }
+
+    .high-risk {
+      background: rgba(255, 0, 0, 0.2);
+      color: #ff5252;
+      box-shadow: 0 0 8px #ff5252;
+    }
+
+    .low-risk {
+      background: rgba(0, 255, 100, 0.2);
+      color: #00e676;
+      box-shadow: 0 0 8px #00e676;
+    }
+    
+
+    .card-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    #churnPieChart {
+    filter: drop-shadow(0 0 2px #ff1744) drop-shadow(0 0 2px #00e676);
+  }
+
+  .card-section-title {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+  color: #FFFD00;
+  text-shadow: 0 0 3px #FFFD00;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-section-title .icon {
+  font-size: 1.2rem;
+}
+
+.section-heading {
+  font-family: 'Lil Grotesk', sans-serif;
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #00ffe7;
+  text-shadow: 0 0 4px #00ffe7, 0 0 12px #00ffe7;
+  letter-spacing: 1px;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+
+        .download-btn {
+            font-family: 'Lil Grotesk', sans-serif;
+            background-color: #00e5ff;
+            color: #0f2027;
+            font-weight: bold;
+            border: none;
+            padding: 12px 28px;
+            width: 100%;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            margin-top: 12px;
+            margin-bottom: 12px;
+            text-decoration: none;
+        }
+
+        .download-btn:hover {
+            background-color: #00bcd4;
+        }
+
+        .glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 0 30px rgba(0, 255, 231, 0.2);
+  width: 420px;
+  max-width: 90%;
+  color: #fff;
+  text-align: center;
+}
+
+/* Specific widths */
+.glass-card.pie {
+  width: 360px;
+  max-width: 100%;
+}
+
+.glass-card.bar {
+  width: 640px;
+  max-width: 100%;
+}
+
+.glass-heading {
+  font-family: 'Lil Grotesk', sans-serif;
+  font-size: 1.4rem;
+  color: #00ffe7;
+  text-shadow: 0 0 8px #00ffe7, 0 0 16px #00ffe7;
+  margin-bottom: 20px;
+}
+
+.glass-card.horizontal-bar {
+  width: 520px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 0 30px rgba(0, 255, 231, 0.2);
+  color: #fff;
+  text-align: center;
+}
+
+.row + .row {
+  margin-top: 30px;
+}
+
+.customer-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 20px;
+  color: #fff;
+  position: relative;
+}
+
+
+.custom-filter-buttons .btn-label {
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 0.95rem;
+  border: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-label.high-risk {
+  background: rgba(255, 0, 0, 0.15);
+  color: #ff5252;
+  box-shadow: 0 0 8px #ff5252;
+}
+
+.btn-label.high-risk:hover {
+  background: #ff5252;
+  color: #121212;
+  box-shadow: 0 0 12px #ff5252;
+}
+
+.btn-label.low-risk {
+  background: rgba(0, 255, 100, 0.15);
+  color: #00e676;
+  box-shadow: 0 0 8px #00e676;
+}
+
+.btn-label.low-risk:hover {
+  background: #00e676;
+  color: #121212;
+  box-shadow: 0 0 12px #00e676;
+}
+
+.btn-label.all-btn {
+  background: rgba(0, 229, 255, 0.15);
+  color: #00e5ff;
+  box-shadow: 0 0 8px #00e5ff;
+}
+
+.btn-label.all-btn:hover {
+  background: #00e5ff;
+  color: #121212;
+  box-shadow: 0 0 12px #00e5ff;
+}
+
+  </style>
+
+  <!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<body>
+
+
+ 
+<div class="container text-center mt-5 mb-5">
+  <h2 class="section-heading">Churn Risk Overview</h2>
+ 
+
+
+
+  <!--  Dashboard Row: Pie + Bar -->
+<div class="container d-flex justify-content-center">
+  <div class="row d-flex flex-wrap justify-content-center gap-5" style="max-width: 1100px; width: 100%;">
+
+    <!-- Pie Chart -->
+    <div class="glass-card pie text-center">
+      <canvas id="churnPieChart" style="margin-bottom: 20px;"></canvas>
+    </div>
+
+    <!-- Vertical Bar Chart -->
+    <div class="glass-card bar text-center">
+      <canvas id="reasonBarChart" style="margin-bottom: 20px;"></canvas>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+
+<div class="container">
+  
+  <h2 class="section-heading">Churn Prediction Dashboard</h2>
+
+
+  <div class="text-center mb-5">
+  <a href="{% url 'download_csv' %}" class="download-btn">Download CSV Report</a>
+</div>
+
+
+<div class="container text-center mb-4">
+  <input type="text" id="searchInput" placeholder="Search by Customer ID"
+         class="form-control mb-3"
+         style="max-width: 300px; margin: 0 auto; font-size: 1rem; padding: 10px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,255,255,0.2);">
+
+  <div class="text-center mb-4">
+  <div class="custom-filter-buttons d-flex justify-content-center flex-wrap gap-2">
+    <button onclick="filterCards('all')" class="btn-label all-btn">All</button>
+    <button onclick="filterCards('high')" class="btn-label high-risk">⚠️ High Risk</button>
+    <button onclick="filterCards('low')" class="btn-label low-risk">✅ Low Risk</button>
+  </div>
+</div>
+</div>
+
+
+
+
+<div class="card-container">
+  {% for row in predictions %}
+  <div class="card customer-card {% if row.churn_prob > 50 %}high{% else %}low{% endif %}">
+
+    <div class="d-flex flex-column justify-content-between" style="height: 100%;">
+
+      <div class="card-body">
+        <h5>Customer ID: {{ row.customer_id }}</h5>
+        <p>Churn Probability: <strong>{{ row.churn_prob }}%</strong></p>
+
+        <p class="card-section-title"><span class="icon">⚠️</span> Top 3 Risk Factors:</p>
+        <ul class="text-start">
+          {% for reason in row.reasons %}
+            <li>{{ reason }}</li>
+          {% endfor %}
+        </ul>
+
+        <p class="card-section-title"><span class="icon">💡</span> Retention Tips:</p>
+        <ul class="text-start">
+          {% for tip in row.tips %}
+            <li>{{ tip }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="text-end px-3 pb-3">
+        <div class="churn-label {% if row.churn_prob > 50 %}high-risk{% else %}low-risk{% endif %}">
+          {% if row.churn_prob > 50 %}⚠️ High Risk{% else %}✅ Low Risk{% endif %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+
+
+
+<script>
+  const ctx = document.getElementById('churnPieChart').getContext('2d');
+
+  const gradientRed = ctx.createLinearGradient(0, 0, 0, 400);
+  gradientRed.addColorStop(0, '#ff6f61'); // Light red
+  gradientRed.addColorStop(1, '#d32f2f'); // Deep red
+
+  const gradientGreen = ctx.createLinearGradient(0, 0, 0, 400);
+  gradientGreen.addColorStop(0, '#66bb6a'); // Light green
+  gradientGreen.addColorStop(1, '#2e7d32'); // Deep green
+
+  const pieChart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: ['High Risk (≥ 50%)', 'Low Risk (< 50%)'],
+      datasets: [{
+        data: [{{ risk_summary.high }}, {{ risk_summary.low }}],
+        backgroundColor: ['#ff0033ff', '#00ff08ff'],
+        borderColor: ['#121212', '#121212'],
+        borderWidth: 4,
+        hoverOffset: 20,
+        borderRadius: 10, // Rounded slices
+      }]
+    },
+    options: {
+      responsive: true,
+      layout: {
+    padding: {
+      top: 30 
+    }
+  },
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            color: '#ffffff',
+            padding: 30,
+
+            font: {
+              family: 'Poppins',
+              size: 14,
+              weight: 'bold'
+            }
+          }
+        },
+        title: {
+          display: false
+        }
+      },
+      animation: {
+        animateScale: true,
+        animateRotate: true
+      }
+    }
+  });
+
+
+  const ctxBar = document.getElementById('reasonBarChart').getContext('2d');
+  const reasonBarChart = new Chart(ctxBar, {
+    type: 'bar',
+    data: {
+      labels: {{ reason_labels|safe }},
+      datasets: [{
+        label: 'Frequency',
+        data: {{ reason_values|safe }},
+        backgroundColor: '#00ffe7',
+        borderColor: '#00ffe7',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { color: '#fff' },
+          grid: { color: 'rgba(255,255,255,0.1)' }
+        },
+        x: {
+          ticks: { color: '#fff' },
+          grid: { color: 'rgba(255,255,255,0.1)' }
+        }
+      }
+    }
+  });
+
+
+     function filterCards(type) {
+    const cards = document.querySelectorAll('.customer-card');
+    cards.forEach(card => {
+      const isHigh = card.classList.contains('high');
+      const isLow = card.classList.contains('low');
+
+      if (type === 'all' ||
+          (type === 'high' && isHigh) ||
+          (type === 'low' && isLow)) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  document.getElementById('searchInput').addEventListener('input', function () {
+    const query = this.value.toLowerCase();
+    const cards = document.querySelectorAll('.customer-card');
+    cards.forEach(card => {
+      const id = card.querySelector('h5')?.textContent.toLowerCase() || '';
+      card.style.display = id.includes(query) ? 'block' : 'none';
+    });
+  });
+
+  
+</script>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+# Ignore Python environment and cache
+venv/
+virenv/
+__pycache__/
+
+# Ignore env file
+.env
+
+# Ignore DB if not needed
+*.sqlite3
+
+# Ignore OS + IDE junk
+*.log
+*.pyc
+.DS_Store
+.idea/
